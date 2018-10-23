@@ -6,7 +6,7 @@
  * Time: 10:27
  */
 
-namespace Crtl\Authorization;
+namespace Crtl\AuthorizationMiddleware;
 
 
 class BasicAuthorization extends AbstractAuthorization
@@ -20,7 +20,7 @@ class BasicAuthorization extends AbstractAuthorization
      * @throws \RuntimeException
      * @return bool
      */
-    protected function isAuthorized()
+    protected function isAuthorized(): bool
     {
         if (!($this->config[self::CONFIG_ENABLE] ?? false)) {
             return true;
@@ -30,7 +30,7 @@ class BasicAuthorization extends AbstractAuthorization
 
         if (!$this->config[self::CONFIG_USER] || !$this->config[self::CONFIG_SECRET]) {
             throw new \RuntimeException(
-                sprintf("Authorization is not configured properly. Please supply config: %s and %s", self::CONFIG_USER, self::CONFIG_SECRET)
+                sprintf("AuthorizationMiddleware is not configured properly. Please supply config: %s and %s", self::CONFIG_USER, self::CONFIG_SECRET)
             );
         }
 

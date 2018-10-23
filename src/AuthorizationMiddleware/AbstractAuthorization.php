@@ -6,7 +6,7 @@
  * Time: 10:14
  */
 
-namespace Crtl\Authorization;
+namespace Crtl\AuthorizationMiddleware;
 
 
 use Psr\Http\Message\RequestInterface;
@@ -15,7 +15,7 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Abstract middleware implementation
  * Extend to implement custom authorization logic
- * @package Borntocreate\Authorization
+ * @package Borntocreate\AuthorizationMiddleware
  */
 abstract class AbstractAuthorization
 {
@@ -35,12 +35,21 @@ abstract class AbstractAuthorization
      */
     protected $response;
 
-
+    /**
+     * AbstractAuthorization constructor.
+     * @param array $config
+     */
     public function __construct(array $config = [])
     {
         $this->config = $config;
     }
 
+    /**
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @param callable $next
+     * @return array
+     */
     public function __invoke(RequestInterface $request, ResponseInterface $response, callable $next)
     {
         $this->request = $request;
@@ -50,16 +59,15 @@ abstract class AbstractAuthorization
             return $next($request, $response);
         }
 
-        $body = $response->getBody();
-        $body->write(json_encode($this->getError()));
-
-        return $response->withStatus(401, "Unauthorized")
-            ->withBody($body);
-
+        return $this->getErrorResponse();
     }
 
-    protected function getError() {
-        return [
+    /**
+     * @return array
+     */
+    protected function getErrorResponse() {
+
+        $data = [
             "status" => 401,
             "error" => [
                 "code" => 401,
@@ -68,8 +76,15 @@ abstract class AbstractAuthorization
                 "title" => "Unauthorized"
             ]
         ];
+
+        $body = $this->response->getBody();
+        $body->write(json_encode($data));
+
+        return $this->response
+            ->withStatus(401, "Unauthorized")
+            ->withBody($body);
     }
 
-    abstract protected function isAuthorized();
+    abstract protected function isAuthorized(): bool;
 
 }
