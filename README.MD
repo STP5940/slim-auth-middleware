@@ -1,6 +1,6 @@
 # Slim Authorization Middleware
 
-This package provides a basic middleware to implement authorization of any time and is configurable.
+This package provides a basic middleware to implement authorization of any type.
 
 
 ## Installation
