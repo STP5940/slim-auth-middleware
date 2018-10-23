@@ -26,7 +26,13 @@ class BasicAuthorization extends AbstractAuthorization
             return true;
         }
 
-        list($type, $credentials) = explode(" ", $this->request->getHeaderLine("Authorization"));
+        $headerParts = explode(" ", $this->request->getHeaderLine("Authorization"));
+
+        if (count($headerParts) < 2) {
+            return false;
+        }
+
+        list($type, $credentials) = $headerParts;
 
         if (!$this->config[self::CONFIG_USER] || !$this->config[self::CONFIG_SECRET]) {
             throw new \RuntimeException(
