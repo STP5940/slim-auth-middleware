@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "php": "^7.0",
-        "slim/slim": "^3.11"
+        "slim/slim": "^3.0"
     },
     "license": "Apache-2.0",
     "authors": [
