@@ -31,7 +31,7 @@ $app->get("/", function($request, $response) use ($app) {
     $body = $response->getBody();
     $body->write("Authorized");
     
-    return $response->withBody($body),
+    return $response->withBody($body);
 });
 
 
